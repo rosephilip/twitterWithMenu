@@ -9,6 +9,8 @@
 #import "BDBOAuth1RequestOperationManager.h"
 #import "User.h"
 
+extern NSString * const TweetUpdated;
+
 @interface TwitterClient : BDBOAuth1RequestOperationManager
 
 + (TwitterClient *)sharedInstance;

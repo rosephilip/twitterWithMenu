@@ -20,6 +20,8 @@
 @property (nonatomic, strong) NSArray *tweets;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
+- (void)updateTweets;
+
 @end
 
 @implementation TweetsViewController
@@ -40,24 +42,9 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Log Out" style:UIBarButtonItemStylePlain target:self action:@selector(onLogout)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Compose" style:UIBarButtonItemStylePlain target:self action:@selector(onCompose)];
     
-    [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSArray *tweets, NSError *error) {
-        if (tweets != nil) {
-            NSLog(@"has logs");
-            self.tweets = tweets;
-            [self.tableView reloadData];
-        } else {
-            NSLog(@"no tweets");
-        }
-    }];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSArray *tweets, NSError *error) {
-        if (tweets != nil) {
-            self.tweets = tweets;
-            [self.tableView reloadData];
-        }
-    }];
+    [self updateTweets];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTweets) name:TweetUpdated object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -103,6 +90,15 @@
             [self.tableView reloadData];
         }
         [self.refreshControl endRefreshing];
+    }];
+}
+
+- (void)updateTweets {
+    [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSArray *tweets, NSError *error) {
+        if (tweets != nil) {
+            self.tweets = tweets;
+            [self.tableView reloadData];
+        }
     }];
 }
 

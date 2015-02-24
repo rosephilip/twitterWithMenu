@@ -12,6 +12,7 @@
 NSString * const kTwitterConsumerKey = @"Sv0L91NJjbJgRXhEgSbhDnZEs";
 NSString * const kTwitterConsumerSecret = @"49fxVeQmIFyrTVsLHj9ulULru6LtQieWy7VVVAYwaQiPNb0NaP";
 NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
+NSString * const TweetUpdated = @"TweetUpdated";
 
 @interface TwitterClient()
 
@@ -73,12 +74,14 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
 
 - (void)statusUpdateWithParams:(NSDictionary *)params {
     [self POST:@"1.1/statuses/update.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:TweetUpdated object:nil];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
 }
 
 - (void)favoriteStatusWithParams:(NSDictionary *)params {
     [self POST:@"1.1/favorites/create.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:TweetUpdated object:nil];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
 }
@@ -86,8 +89,9 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
 - (void)retweetStatusWithParams:(id)tweetId {
     NSDictionary *params = [NSDictionary dictionary];
     [self POST:[NSString stringWithFormat:@"1.1/statuses/retweet/%@.json", tweetId]  parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:TweetUpdated object:nil];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     }];
-    }
+}
 
 @end
