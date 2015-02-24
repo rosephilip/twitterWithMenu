@@ -28,6 +28,6 @@ Time spent: 10.5 hours
 
 ### Walkthrough
 
-![Video Walkthrough](...)
+![Video Walkthrough](https://cloud.githubusercontent.com/assets/3673740/6354469/6f1191c4-bc04-11e4-8344-a3f4361256b7.gif)
 
 
