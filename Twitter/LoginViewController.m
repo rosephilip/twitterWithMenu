@@ -7,12 +7,25 @@
 //
 
 #import "LoginViewController.h"
+#import "TwitterClient.h"
+#import "TweetsViewController.h"
 
 @interface LoginViewController ()
 
 @end
 
 @implementation LoginViewController
+- (IBAction)onLogin:(id)sender {
+    [[TwitterClient sharedInstance] loginWithCompletion:^(User *user, NSError *error) {
+        if (user != nil) {
+            // Modally present the tweets view
+            UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:[[TweetsViewController alloc] init]];
+            [self presentViewController:nvc animated:YES completion:nil];
+        } else {
+            // Present error view
+        }
+    }];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
